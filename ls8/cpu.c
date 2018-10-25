@@ -56,16 +56,15 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
 void cpu_run(struct cpu *cpu)
 {
   int running = 1; // True until we get a HLT instruction
-
+  unsigned char IR = cpu_ram_read(cpu, '0');
   while (running) {
     // TODO
-    unsigned char IR;
     unsigned char operandA = cpu_ram_read(cpu, cpu->PC + 1);
     unsigned char operandB = cpu_ram_read(cpu, cpu->PC + 2);
     IR = operandA + operandB;
     switch(IR) {
-      case 10000010:
-        printf("%s", "This is print8");
+      case 'HTL':
+        running = 0;
         break;
       default:
         printf("%s", "ERROR");  
