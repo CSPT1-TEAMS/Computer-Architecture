@@ -59,6 +59,17 @@ void cpu_run(struct cpu *cpu)
 /**
  * Initialize a CPU struct
  */
+
+unsigned char cpu_ram_read( struct cpu *cpu, unsigned char mar)  
+{
+  return cpu->ram[mar];
+}
+
+void cpu_ram_write( struct cpu *cpu, unsigned char mar, unsigned char mdr )
+{
+  cpu->ram[mar] = mdr;
+}
+
 void cpu_init(struct cpu *cpu)
 {
   // TODO: Initialize the PC and other special registers
