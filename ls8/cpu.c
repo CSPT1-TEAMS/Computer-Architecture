@@ -1,10 +1,20 @@
 #include "cpu.h"
+#include <string.h>
 
 #define DATA_LEN 6
 
 /**
  * Load the binary bytes from a .ls8 source file into a RAM array
  */
+
+unsigned char cpu_ram_read(struct cpu *cpu, unsigned char mar) {
+  return cpu->ram[mar];
+}
+
+void cpu_ram_write(struct cpu *cpu, unsigned char mar, unsigned char mdr) {
+  cpu->ram[mar] = mdr;
+}
+
 void cpu_load(struct cpu *cpu)
 {
   char data[DATA_LEN] = {
@@ -49,11 +59,23 @@ void cpu_run(struct cpu *cpu)
 
   while (running) {
     // TODO
+    unsigned char IR;
+    unsigned char operandA = cpu_ram_read(cpu, cpu->PC + 1);
+    unsigned char operandB = cpu_ram_read(cpu, cpu->PC + 2);
+    IR = operandA + operandB;
+    switch(IR) {
+      case 10000010:
+        printf("%s", "This is print8");
+        break;
+      default:
+        printf("%s", "ERROR");  
+    }
     // 1. Get the value of the current instruction (in address PC).
     // 2. switch() over it to decide on a course of action.
     // 3. Do whatever the instruction should do according to the spec.
     // 4. Move the PC to the next instruction.
   }
+  cpu->PC++;
 }
 
 /**
@@ -62,6 +84,9 @@ void cpu_run(struct cpu *cpu)
 void cpu_init(struct cpu *cpu)
 {
   // TODO: Initialize the PC and other special registers
+  cpu->PC = 0;
+  memset(cpu->ram, 0, sizeof(int) *8 );
+  memset(cpu->registers, 0, sizeof(int) * 256);
 
   // TODO: Zero registers and RAM
 }
