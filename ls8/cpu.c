@@ -73,6 +73,15 @@ void cpu_ram_write( struct cpu *cpu, unsigned char mar, unsigned char mdr )
 void cpu_init(struct cpu *cpu)
 {
   // TODO: Initialize the PC and other special registers
-
+  cpu->PC = 0;
+  memset(cpu->registers, 0, sizeof(int)*8);
+  memset(cpu->ram, 0, sizeof(int)*256);
   // TODO: Zero registers and RAM
+
+  //   The `cpu_init()` function takes a pointer to a `struct cpu` and initializes it
+  // as necessary. At first, the PC, registers, and RAM should be cleared to zero.
+  // (`memset()` might help you clear registers and RAM.)
+
+  // Later on, you might do further initialization here, e.g. setting the initial
+  // value of the stack pointer.
 }
