@@ -50,7 +50,6 @@ void cpu_load(char *filename, struct cpu *cpu)
     // else ignore
   }
   fclose(fp);
-
 }
 
 /**
@@ -73,17 +72,13 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
  */
 void cpu_run(struct cpu *cpu)
 {
-  int running = 1; // True until we get a HLT instruction
+  int running = 1; // True until we get a HLT instruction or default case
 
   while (running)
   {
-    // TODO
-
     unsigned char IR = cpu->ram[cpu->PC];
     unsigned char operandA = cpu->ram[cpu->PC + 1];
- 
     unsigned char operandB = cpu->ram[cpu->PC + 2];
-    //get opcode
     unsigned char opcode = IR;
 
     switch (opcode)
@@ -102,7 +97,7 @@ void cpu_run(struct cpu *cpu)
       break;
     case MUL:
       cpu->registers[operandA] = cpu->registers[operandA] * cpu->registers[operandB];
-      cpu->PC += 3; 
+      cpu->PC += 3;
       break;
     default:
       running = 0;
