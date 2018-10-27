@@ -22,15 +22,6 @@ void cpu_ram_write(struct cpu *cpu, unsigned char mar, unsigned char mdr)
 void cpu_load(char *filename, struct cpu *cpu)
 {
 
-  // char data[DATA_LEN] = {
-  //   // From print8.ls8
-  //   0b10000010, // LDI R0,8
-  //   0b00000000,
-  //   0b00001000,
-  //   0b01000111, // PRN R0
-  //   0b00000000,
-  //   0b00000001  // HLT
-  // };
   FILE *fp;
   int address = 0;
   char line[1024];
@@ -42,13 +33,6 @@ void cpu_load(char *filename, struct cpu *cpu)
     printf("INVALID FILE NAME");
     return;
   }
-  // read data from file --fscanf??
-  // fscanf(fp, "%s", line );
-  // if( strchr(line, '#') != NULL) {
-  //   // if comment, ignore
-
-  // }
-  // else, store byte data in RAM
 
   while (fgets(line, sizeof line, fp) != NULL) //not at eof
   {
@@ -67,7 +51,6 @@ void cpu_load(char *filename, struct cpu *cpu)
   }
   fclose(fp);
 
-  // TODO: Replace this with something less hard-coded
 }
 
 /**
@@ -126,7 +109,6 @@ void cpu_run(struct cpu *cpu)
     // 3. Do whatever the instruction should do according to the spec.
     // 4. Move the PC to the next instruction.
   }
-  // cpu->PC++;
 }
 
 /**
