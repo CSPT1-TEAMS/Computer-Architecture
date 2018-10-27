@@ -95,12 +95,12 @@ void cpu_run(struct cpu *cpu)
   while (running)
   {
     // TODO
+
     unsigned char IR = cpu->ram[cpu->PC];
     unsigned char operandA = cpu->ram[cpu->PC + 1];
     unsigned char operandB = cpu->ram[cpu->PC + 2];
-
     //get opcode
-    unsigned char opcode = IR & 00001111;
+    unsigned char opcode = IR;
 
     switch (opcode)
     {
@@ -118,7 +118,7 @@ void cpu_run(struct cpu *cpu)
       break;
     default:
       running = 0;
-      printf("%s", "ERROR");
+      printf("%s\n", "ERROR");
     }
 
     // 1. Get the value of the current instruction (in address PC).
