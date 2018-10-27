@@ -81,6 +81,7 @@ void cpu_run(struct cpu *cpu)
 
     unsigned char IR = cpu->ram[cpu->PC];
     unsigned char operandA = cpu->ram[cpu->PC + 1];
+ 
     unsigned char operandB = cpu->ram[cpu->PC + 2];
     //get opcode
     unsigned char opcode = IR;
@@ -99,11 +100,14 @@ void cpu_run(struct cpu *cpu)
       printf("%d\n", cpu->registers[operandA]);
       cpu->PC += 2;
       break;
+    case MUL:
+      cpu->registers[operandA] = cpu->registers[operandA] * cpu->registers[operandB];
+      cpu->PC += 3; 
+      break;
     default:
       running = 0;
       printf("%s\n", "ERROR");
     }
-
     // 1. Get the value of the current instruction (in address PC).
     // 2. switch() over it to decide on a course of action.
     // 3. Do whatever the instruction should do according to the spec.
