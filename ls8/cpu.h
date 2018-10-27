@@ -31,6 +31,7 @@ enum alu_op {
 #define ADD  0b10100000
 #define PRA  0b01001000
 #define IREG 0b00010011
+#define INC  0b01100101
 // TODO: more instructions here. These can be used in cpu_run().
 
 // Function declarations
