@@ -99,6 +99,23 @@ void cpu_run(struct cpu *cpu)
       cpu->registers[operandA] = cpu->registers[operandA] * cpu->registers[operandB];
       cpu->PC += 3;
       break;
+    // case DEC:
+    //   break;  
+    case PUSH:
+    //SP R7
+      //decrement SP address
+      //put new value in address
+      cpu->registers[7]--;
+      cpu->registers[7] = cpu->registers[operandA];
+      cpu->PC += 2;
+      break;
+    case POP:
+      //store value r0
+      cpu->registers[7] = cpu->registers[0];
+      cpu->registers[7]++;
+      //increment SP
+      cpu->PC += 2;
+      break;    
     default:
       running = 0;
       printf("%s\n", "ERROR");

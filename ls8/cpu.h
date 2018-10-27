@@ -33,6 +33,9 @@ enum alu_op {
 #define IREG 0b00010011
 #define INC  0b01100101
 #define JMP  0b01010100
+#define PUSH 0b01000101
+#define POP  0b01000110
+#define DEC  0b01100110
 // TODO: more instructions here. These can be used in cpu_run().
 
 // Function declarations
