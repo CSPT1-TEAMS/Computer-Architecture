@@ -34,16 +34,18 @@ void cpu_load(char *filename, struct cpu *cpu)
     return;
   }
 
-  while (fgets(line, sizeof line, fp) != NULL) //not at eof
+  while (address < 256 && fgets(line, sizeof line, fp) != NULL) //not at eof
   {
     char *end_of_instr;
     unsigned char *data;
-
+    // in a line, save the numeric data (byte/instruction/register/value) in data, ignoring non numeric characters
     data = strtol(line, &end_of_instr, 2);
 
     // if data != 0, save
-    if (data != end_of_instr)
+    //data can be 0 IF no byte data OR byte = 0
+    if (data != end_of_instr) //use pointer to first non-numeric character
     {
+      //only write instructions, not comments
       cpu->ram[address] = data;
       address++;
     }
@@ -79,9 +81,8 @@ void cpu_run(struct cpu *cpu)
     unsigned char IR = cpu->ram[cpu->PC];
     unsigned char operandA = cpu->ram[cpu->PC + 1];
     unsigned char operandB = cpu->ram[cpu->PC + 2];
-    unsigned char opcode = IR;
 
-    switch (opcode)
+    switch (IR)
     {
     case LDI:
       cpu->registers[operandA] = operandB;
@@ -96,46 +97,34 @@ void cpu_run(struct cpu *cpu)
       cpu->PC += 2;
       break;
     case MUL:
-      cpu->registers[operandA] = cpu->registers[operandA] * cpu->registers[operandB];
+      cpu->registers[operandA] *= cpu->registers[operandB];
       cpu->PC += 3;
-      break;
-    // case DEC:
-    //   break;  
+      break; 
     case PUSH:
-    //SP R7
-      //decrement SP address
-      //put new value in address
-      cpu->registers[7]--;
-      cpu->registers[7] = cpu->registers[operandA];
+      //cpu->ram[address] = data;
+      cpu->registers[SP]--;
+      cpu->ram[cpu->registers[SP]] = cpu->registers[operandA];
       cpu->PC += 2;
       break;
     case POP:
-      //store value r0
-      cpu->registers[7] = cpu->registers[0];
-      cpu->registers[7]++;
-      //increment SP
+      cpu->registers[operandA] = cpu->ram[cpu->registers[SP]];
+      cpu->registers[SP]++;
       cpu->PC += 2;
-      break;    
+      // return cpu->registers[operandA]; 
+      break;
     default:
       running = 0;
       printf("%s\n", "ERROR");
     }
-    // 1. Get the value of the current instruction (in address PC).
-    // 2. switch() over it to decide on a course of action.
-    // 3. Do whatever the instruction should do according to the spec.
-    // 4. Move the PC to the next instruction.
   }
 }
 
-/**
- * Initialize a CPU struct
- */
 void cpu_init(struct cpu *cpu)
 {
   // TODO: Initialize the PC and other special registers
   cpu->PC = 0;
   memset(cpu->ram, 0, sizeof cpu->ram);             //8
   memset(cpu->registers, 0, sizeof cpu->registers); //256
-
   // TODO: Zero registers and RAM
+  cpu->registers[SP]= ADDR_EMPTY_STACK; //244
 }

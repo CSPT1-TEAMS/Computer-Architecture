@@ -37,7 +37,9 @@ enum alu_op {
 #define POP  0b01000110
 #define DEC  0b01100110
 // TODO: more instructions here. These can be used in cpu_run().
-
+#define ADDR_PROGRAM_ENTRY 0x00
+#define ADDR_EMPTY_STACK 0xF4
+#define SP 7
 // Function declarations
 
 extern void cpu_load(char *filename, struct cpu *cpu);
