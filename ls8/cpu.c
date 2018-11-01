@@ -62,11 +62,27 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
   switch (op)
   {
   case ALU_MUL:
-    // TODO
+    cpu->registers[regA] *= cpu->registers[regB];
+    cpu->PC += 3;
     break;
-
-    // TODO: implement more ALU ops
+  case ALU_ADD:
+    cpu->registers[regA] += cpu->registers[regB];
+    cpu->PC += 3;
+    break;
   }
+}
+
+void cpu_push(struct cpu *cpu, unsigned char regA) {
+  cpu->registers[SP]--;
+  cpu->ram[cpu->registers[SP]] = cpu->registers[regA];
+  cpu->PC += 2;
+}
+
+int cpu_pop(struct cpu *cpu, unsigned char regA) {
+  cpu->registers[regA] = cpu->ram[cpu->registers[SP]];
+  cpu->registers[SP]++;
+  cpu->PC += 2;
+  return cpu->registers[regA];
 }
 
 /**
@@ -81,40 +97,46 @@ void cpu_run(struct cpu *cpu)
     unsigned char IR = cpu->ram[cpu->PC];
     unsigned char operandA = cpu->ram[cpu->PC + 1];
     unsigned char operandB = cpu->ram[cpu->PC + 2];
+    unsigned char location;
 
     switch (IR)
     {
-    case LDI:
-      cpu->registers[operandA] = operandB;
-      cpu->PC += 3;
-      break;
+    case ADD:
+      alu(cpu, ADD, operandA, operandB); 
+      break; 
+    case CALL:
+      cpu_push(cpu, cpu->PC + 2);
+      cpu->PC = cpu->registers[operandA];
+      break;  
     case HLT:
       running = 0;
       cpu->PC += 1;
       break;
+    case LDI:
+      cpu->registers[operandA] = operandB;
+      cpu->PC += 3;
+      break;
+    case MUL:
+      alu(cpu, ALU_MUL, operandA, operandB);
+      break; 
     case PRN:
       printf("%d\n", cpu->registers[operandA]);
       cpu->PC += 2;
       break;
-    case MUL:
-      cpu->registers[operandA] *= cpu->registers[operandB];
-      cpu->PC += 3;
-      break; 
+    case POP:
+      //if sp is R7, empty stack
+      cpu_pop(cpu, operandA);
+      break;  
     case PUSH:
       //cpu->ram[address] = data;
-      cpu->registers[SP]--;
-      cpu->ram[cpu->registers[SP]] = cpu->registers[operandA];
-      cpu->PC += 2;
+      cpu_push(cpu, operandA);
       break;
-    case POP:
-      cpu->registers[operandA] = cpu->ram[cpu->registers[SP]];
-      cpu->registers[SP]++;
-      cpu->PC += 2;
-      // return cpu->registers[operandA]; 
-      break;
+    case RET:
+      cpu->PC = cpu_pop(cpu, operandA);
+      break;  
     default:
       running = 0;
-      printf("%s\n", "ERROR");
+      printf("%s\n", "DEFAULT SWITCH CASE");
     }
   }
 }

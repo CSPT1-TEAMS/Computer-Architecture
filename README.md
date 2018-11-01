@@ -22,7 +22,7 @@
 - [X] Beautify your `cpu_run()` function, if needed
 
 ### Day 3: Get `stack.ls8` running
-- [ ] Implement System Stack
+- [X] Implement System Stack
 
 ### Day 4: Get `call.ls8` running
 - [ ] Implement Subroutine Calls
