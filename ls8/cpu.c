@@ -43,7 +43,7 @@ void cpu_load(char *filename, struct cpu *cpu)
 
     // if data != 0, save
     //data can be 0 IF no byte data OR byte = 0
-    if (data != end_of_instr) //use pointer to first non-numeric character
+    if (line != end_of_instr) //use pointer to first non-numeric character
     {
       //only write instructions, not comments
       cpu->ram[address] = data;
@@ -72,7 +72,7 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
   }
 }
 
-void cpu_push(struct cpu *cpu, unsigned char regA) {
+int cpu_push(struct cpu *cpu, unsigned char regA) {
   cpu->registers[SP]--;
   cpu->ram[cpu->registers[SP]] = cpu->registers[regA];
   cpu->PC += 2;
@@ -82,7 +82,7 @@ int cpu_pop(struct cpu *cpu, unsigned char regA) {
   cpu->registers[regA] = cpu->ram[cpu->registers[SP]];
   cpu->registers[SP]++;
   cpu->PC += 2;
-  return cpu->registers[regA];
+  printf("%d\n", cpu->registers[regA]);
 }
 
 /**
@@ -97,15 +97,16 @@ void cpu_run(struct cpu *cpu)
     unsigned char IR = cpu->ram[cpu->PC];
     unsigned char operandA = cpu->ram[cpu->PC + 1];
     unsigned char operandB = cpu->ram[cpu->PC + 2];
-    unsigned char location;
 
     switch (IR)
     {
     case ADD:
-      alu(cpu, ADD, operandA, operandB); 
+      alu(cpu, ALU_ADD, operandA, operandB); 
       break; 
     case CALL:
-      cpu_push(cpu, cpu->PC + 2);
+      cpu->PC += 2;
+      cpu->registers[SP]--;
+      cpu->ram[cpu->registers[SP]] = cpu->PC;
       cpu->PC = cpu->registers[operandA];
       break;  
     case HLT:
@@ -132,7 +133,8 @@ void cpu_run(struct cpu *cpu)
       cpu_push(cpu, operandA);
       break;
     case RET:
-      cpu->PC = cpu_pop(cpu, operandA);
+      cpu->PC = cpu->ram[cpu->registers[SP]];
+      cpu->registers[SP]++;
       break;  
     default:
       running = 0;
