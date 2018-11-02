@@ -94,10 +94,10 @@ void cpu_run(struct cpu *cpu)
 
   while (running)
   {
-    unsigned char IR = cpu->ram[cpu->PC];
-    unsigned char operandA = cpu->ram[cpu->PC + 1];
-    unsigned char operandB = cpu->ram[cpu->PC + 2];
-
+    unsigned char IR = cpu_ram_read(cpu, cpu->PC);
+    unsigned char operandA = cpu_ram_read(cpu, cpu->PC + 1);
+    unsigned char operandB = cpu_ram_read(cpu, cpu->PC + 2);
+    
     switch (IR)
     {
     case ADD:
