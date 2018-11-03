@@ -22,7 +22,6 @@ void cpu_load(struct cpu *cpu, char *filename)
   FILE *fp = fopen(filename, "r");
   char line[1024];
   int address = cpu->pc;
-  char data[DATA_LEN] = {
 
   if (fp == NULL)
   {
