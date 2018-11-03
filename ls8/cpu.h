@@ -1,8 +1,8 @@
 #ifndef _CPU_H_
 #define _CPU_H_
 
-#define MAX_ADDR 0xff
-#define CPU_FLAG 0x00
+#define C_FLAG 0x00
+#define MAX_ADDR 0xFF
 
 #define SP 7
 #define IS 6
@@ -15,7 +15,7 @@
 
 // Holds all information about the CPU
 typedef struct cpu {
-  int flag;
+  unsigned char flag;
   unsigned char pc;
   unsigned reg[8];
   unsigned ram[MAX_ADDR +1];

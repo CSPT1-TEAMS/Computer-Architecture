@@ -3,8 +3,6 @@
 #include <string.h>
 #include "cpu.h"
 
-#define DATA_LEN 6
-
 unsigned char cpu_ram_read(struct cpu *cpu, unsigned char address)
 {
   return cpu->ram[address];
@@ -185,7 +183,7 @@ void cpu_run(struct cpu *cpu)
 void cpu_init(struct cpu *cpu)
 {
   cpu->pc = START_OF_PROGRAM_ADDR;
-  cpu->flag CPU_FLAG;
+  cpu->flag = C_FLAG;
 
   cpu->reg[SP] = START_OF_STACK_ADDR;
   cpu->reg[IM] = INTERRUPT_MASK;
