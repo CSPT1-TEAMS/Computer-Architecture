@@ -1,13 +1,16 @@
 #ifndef _CPU_H_
 #define _CPU_H_
 
+#define MAX_ADDR 0xff
+#define CPU_FLAG 0x00
+
 // Holds all information about the CPU
-struct cpu {
-  // TODO
-  // PC
-  // registers (array)
-  // ram (array)
-};
+typedef struct cpu {
+  int flag;
+  unsigned char pc;
+  unsigned reg[8];
+  unsigned ram[MAX_ADDR +1];
+} CPU;
 
 // ALU operations
 enum alu_op {
