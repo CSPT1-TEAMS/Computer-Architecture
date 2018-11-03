@@ -14,6 +14,20 @@ void cpu_ram_write(struct cpu *cpu, unsigned char address, unsigned char value)
 {
   cpu->ram[address] = value;
 }
+
+void cpu_push(struct cpu *cpu, unsigned char value)
+{
+  cpu->reg[SP]--;
+  cpu_ram_write(cpu, cpu->reg[SP], value);
+}
+
+
+unsigned char cpu_pop(struct cpu *cpu)
+{
+  unsigned char value = cpu_ram_read(cpu, cpu->reg[SP]);
+  cpu->reg[SP]++;
+  return value;
+}
 /**
  * Load the binary bytes from a .ls8 source file into a RAM array
  */
