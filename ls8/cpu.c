@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "cpu.h"
 
 #define DATA_LEN 6
@@ -57,7 +60,7 @@ void cpu_run(struct cpu *cpu)
   int running = 1; // True until we get a HLT instruction
 
   while (running) {
-    unsigned char IR = cpu_ram_read(cpu. cpu->pc);
+    unsigned char IR = cpu_ram_read(cpu, cpu->pc);
     unsigned char operandA = cpu_ram_read(cpu, (cpu->pc +1)& MAX_ADDR);
     unsigned char operandB = cpu_ram_read(cpu, (cpu->pc + 2)& MAX_ADDR);
 
@@ -106,10 +109,10 @@ void cpu_run(struct cpu *cpu)
       case CMP:
         if (cpu->reg[operandA] == cpu->reg[operandB])
         {
-          cpu->fl = 1;
+          cpu->flag = 1;
         } else
         {
-          cpu->fl = 0;
+          cpu->flag = 0;
         }
         break;
 
@@ -118,7 +121,7 @@ void cpu_run(struct cpu *cpu)
         break;
 
       case JEQ:
-        if (cpu->fl)
+        if (cpu->flag)
         {
           cpu->pc = cpu->reg[operandA];
         }
@@ -129,7 +132,7 @@ void cpu_run(struct cpu *cpu)
         break;
 
       case JNE:
-        if (!cpu->fl)
+        if (!cpu->flag)
         {
           cpu->pc = cpu->reg[operandA];
         }
@@ -165,6 +168,6 @@ void cpu_init(struct cpu *cpu)
   cpu->reg[IS] = INTERRUPTS;
 
   // TODO: Zero registers and RAM
-  memset(cpu->reg, 0, sizeof cpu-reg);
+  memset(cpu->reg, 0, sizeof cpu->reg);
   memset(cpu->ram, 0, sizeof cpu->ram);
 }
